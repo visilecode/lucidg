@@ -3,7 +3,7 @@
 # See http://www.sublimetext.com/docs/3/syntax.html
 file_extensions:
   - ec
-scope: source.example-c
+scope: text.example-c
 
 contexts:
   # The prototype context is prepended to all contexts but those setting
@@ -38,7 +38,7 @@ contexts:
       scope: punctuation.definition.string.begin.example-c
       push: inside_string
 
-  inside_string:
+  inside_comment:
     - meta_include_prototype: false
     - meta_scope: string.quoted.double.example-c
     - match: '\.'
@@ -48,13 +48,20 @@ contexts:
       pop: true
 
   comments:
-    # Comments begin with a '//' and finish at the end of the line.
-    - match: '\(([^"]*)\)'
-      scope: punctuation.definition.comment.-iso
-      push:
-        # This is an anonymous context push for brevity.
-        - meta_scope: comment.line.double-slash.example-c
-        - match: $\n?
-          pop: true
+    # Commets starts/ends with (). Only content inside brackets will be comented.
+    - match: '\('
+      scope: punctuation.definition.string.begin.example-c
+      push: inside_string
+
+  inside_string:
+    - meta_include_prototype: false
+    - meta_scope: comment.line.double-slash.example-c
+    - match: '(\.|\,)'
+      scope: constant.character.escape.example-c
+    - match: '\)'
+      scope: punctuation.definition.string.end.example-c
+      pop: true
+
+
 #https://macromates.com/manual/en/language_grammars https://regexr.com ([(')])(?:(?=(\?))\2.)*?
 #\((.*?)\)
