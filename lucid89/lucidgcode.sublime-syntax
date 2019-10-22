@@ -19,14 +19,20 @@ contexts:
     - include: strings
 
   cordinates:
-    # Keywords are if, else for and while.
-    # Note that blackslashes don't need to be escaped within single quoted
-    # strings in YAML. When using single quoted strings, only single quotes
-    # need to be escaped: this is done by using two single quotes next to each
-    # other.
+
+    # Matches cord.-let. and number with individual scope.
     - match: '(X|Y|Z)'
       scope: keyword.control.base-cord-iso
+      push: and_number
 
+  and_number:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.example-c
+    - match: '\d*'
+      scope: entity.name.class
+      pop: true
+
+# Matches number with no cord.-let.
   numbers:
     - match: '(-)?[0-9.]+'
       scope: constant.numeric.example-c
@@ -36,9 +42,9 @@ contexts:
     # character.
     - match: '"'
       scope: punctuation.definition.string.begin.example-c
-      push: inside_string
+      push: inside_strings
 
-  inside_comment:
+  inside_strings:
     - meta_include_prototype: false
     - meta_scope: string.quoted.double.example-c
     - match: '\.'
@@ -48,15 +54,15 @@ contexts:
       pop: true
 
   comments:
-    # Commets starts/ends with (). Only content inside brackets will be comented.
+    # Commets starts/ends with (). Only content inside brackets will comented.
     - match: '\('
       scope: punctuation.definition.string.begin.example-c
-      push: inside_string
+      push: inside_comments
 
-  inside_string:
+  inside_comments:
     - meta_include_prototype: false
-    - meta_scope: comment.line.double-slash.example-c
-    - match: '(\.|\,)'
+    - meta_scope: comment.brackets.double-slash.example-c
+    - match: '\.'
       scope: constant.character.escape.example-c
     - match: '\)'
       scope: punctuation.definition.string.end.example-c
@@ -64,4 +70,4 @@ contexts:
 
 
 #https://macromates.com/manual/en/language_grammars https://regexr.com ([(')])(?:(?=(\?))\2.)*?
-#\((.*?)\)
+#\((.*?)\)  (X4) ()
