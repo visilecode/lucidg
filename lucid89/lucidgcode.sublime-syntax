@@ -32,9 +32,9 @@ contexts:
       scope: entity.name.class
       pop: true
 
-# Matches number with no cord.-let.
+# Matches number with no cord.-let. and lights - +
   numbers:
-    - match: '(-)?[0-9.]+'
+    - match: '(-)?[0-9.]+' # + does what?
       scope: constant.numeric.example-c
 
   strings:
@@ -62,9 +62,9 @@ contexts:
   inside_comments:
     - meta_include_prototype: false
     - meta_scope: comment.brackets.double-slash.example-c
-    - match: '\.'
+    - match: '\.' #actual commment
       scope: constant.character.escape.example-c
-    - match: '\)'
+    - match: '\)' #end of comment
       scope: punctuation.definition.string.end.example-c
       pop: true
 
